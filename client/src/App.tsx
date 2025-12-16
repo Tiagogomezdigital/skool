@@ -126,22 +126,67 @@ function Router() {
         <PurchasePage />
       </Route>
       
-      {/* Rotas de comunidade por slug: /c/:slug/* - precisa estar antes do catch-all */}
+      {/* Rotas de comunidade por slug: /c/:slug/* - rotas explícitas no nível superior */}
+      <Route path="/c/:slug/courses/:id">
+        <AuthGuard>
+          <Layout>
+            <CourseView />
+          </Layout>
+        </AuthGuard>
+      </Route>
+      <Route path="/c/:slug/courses">
+        <AuthGuard>
+          <Layout>
+            <Courses />
+          </Layout>
+        </AuthGuard>
+      </Route>
+      <Route path="/c/:slug/community">
+        <AuthGuard>
+          <Layout>
+            <Community />
+          </Layout>
+        </AuthGuard>
+      </Route>
+      <Route path="/c/:slug/profile">
+        <AuthGuard>
+          <Layout>
+            <ProfilePage />
+          </Layout>
+        </AuthGuard>
+      </Route>
+      <Route path="/c/:slug/saved">
+        <AuthGuard>
+          <Layout>
+            <SavedPostsPage />
+          </Layout>
+        </AuthGuard>
+      </Route>
+      <Route path="/c/:slug/notifications">
+        <AuthGuard>
+          <Layout>
+            <NotificationsPage />
+          </Layout>
+        </AuthGuard>
+      </Route>
+      <Route path="/c/:slug/chat/:id">
+        <AuthGuard>
+          <Layout>
+            <ChatDetailPage />
+          </Layout>
+        </AuthGuard>
+      </Route>
+      <Route path="/c/:slug/chat">
+        <AuthGuard>
+          <Layout>
+            <ChatPage />
+          </Layout>
+        </AuthGuard>
+      </Route>
       <Route path="/c/:slug">
         <AuthGuard>
           <Layout>
-            <Switch>
-              <Route path="/c/:slug" component={Dashboard} />
-              <Route path="/c/:slug/courses/:id" component={CourseView} />
-              <Route path="/c/:slug/courses" component={Courses} />
-              <Route path="/c/:slug/community" component={Community} />
-              <Route path="/c/:slug/profile" component={ProfilePage} />
-              <Route path="/c/:slug/saved" component={SavedPostsPage} />
-              <Route path="/c/:slug/notifications" component={NotificationsPage} />
-              <Route path="/c/:slug/chat/:id" component={ChatDetailPage} />
-              <Route path="/c/:slug/chat" component={ChatPage} />
-              <Route component={NotFound} />
-            </Switch>
+            <Dashboard />
           </Layout>
         </AuthGuard>
       </Route>
