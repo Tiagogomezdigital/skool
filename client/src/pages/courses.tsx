@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
@@ -12,8 +13,21 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function Courses() {
   const [location, setLocation] = useLocation();
-  const { data: courses, isLoading } = useCourses();
+  const { data: courses, isLoading, error } = useCourses();
   const { data: enrolledCourseIds = [] } = useEnrollments();
+  
+  // Debug: Log dos cursos carregados
+  useEffect(() => {
+    if (!isLoading) {
+      console.log('📊 Courses Page - Status:', {
+        isLoading,
+        hasError: !!error,
+        error: error?.message,
+        coursesCount: courses?.length || 0,
+        courses: courses?.map(c => ({ id: c.id, title: c.title, community_id: c.community_id }))
+      });
+    }
+  }, [courses, isLoading, error]);
   const enrollMutation = useEnrollInCourse();
   const { toast } = useToast();
 

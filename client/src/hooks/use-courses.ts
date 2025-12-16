@@ -37,7 +37,16 @@ export function useCourses() {
         .order('order', { ascending: true, nullsFirst: false })
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (error) {
+        console.error('❌ Erro ao buscar cursos:', error);
+        throw error;
+      }
+      
+      console.log('✅ Cursos carregados do banco:', data?.length || 0, 'cursos');
+      if (data && data.length > 0) {
+        console.log('📚 Primeiros cursos:', data.slice(0, 3).map(c => ({ id: c.id, title: c.title, community_id: c.community_id })));
+      }
+      
       return data;
     },
   });
