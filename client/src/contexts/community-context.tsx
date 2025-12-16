@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useLocation } from 'wouter';
 import { useCommunityBySlug, type Community } from '@/hooks/use-communities';
 
 interface CommunityContextType {
@@ -10,39 +11,38 @@ interface CommunityContextType {
 
 const CommunityContext = createContext<CommunityContextType | undefined>(undefined);
 
-// Extrair slug do subdomínio
-function extractSlugFromHostname(): string | null {
+// Extrair slug da URL (formato /c/:slug)
+function extractSlugFromUrl(): string | null {
   if (typeof window === 'undefined') return null;
 
-  const hostname = window.location.hostname;
+  const pathname = window.location.pathname;
   
-  // Remover porta se existir
-  const hostWithoutPort = hostname.split(':')[0];
-  
-  // Se for localhost ou IP, tentar pegar do localStorage
-  if (hostWithoutPort === 'localhost' || hostWithoutPort.match(/^\d+\.\d+\.\d+\.\d+$/)) {
-    return localStorage.getItem('selectedCommunity') || null;
+  // Verificar se está no formato /c/:slug
+  const match = pathname.match(/^\/c\/([^\/]+)/);
+  if (match) {
+    return match[1];
   }
   
-  // Extrair subdomínio (ex: zona.app.com -> zona)
-  const parts = hostWithoutPort.split('.');
-  
-  // Se tiver mais de 2 partes, o primeiro é o subdomínio
-  if (parts.length > 2) {
-    return parts[0];
-  }
-  
-  // Se não tiver subdomínio, retorna null (domínio principal)
-  return null;
+  // Fallback: tentar pegar do localStorage (para desenvolvimento)
+  return localStorage.getItem('selectedCommunity') || null;
 }
 
 export function CommunityProvider({ children }: { children: ReactNode }) {
+  const [location, setLocation] = useLocation();
   const [communitySlug, setCommunitySlug] = useState<string | null>(() => {
-    return extractSlugFromHostname();
+    return extractSlugFromUrl();
   });
 
   const { data: community, isLoading } = useCommunityBySlug(communitySlug);
   const [selectedCommunity, setSelectedCommunityState] = useState<Community | null>(null);
+
+  // Atualizar slug quando a URL mudar
+  useEffect(() => {
+    const newSlug = extractSlugFromUrl();
+    if (newSlug !== communitySlug) {
+      setCommunitySlug(newSlug);
+    }
+  }, [location, communitySlug]);
 
   // Atualizar comunidade quando dados carregarem
   useEffect(() => {
@@ -51,41 +51,29 @@ export function CommunityProvider({ children }: { children: ReactNode }) {
       // Salvar no localStorage para desenvolvimento local
       if (typeof window !== 'undefined') {
         localStorage.setItem('selectedCommunity', community.slug);
-    }
+      }
     } else if (!isLoading && communitySlug) {
       // Se não encontrou comunidade mas tinha slug, limpar
       setSelectedCommunityState(null);
     }
   }, [community, isLoading, communitySlug]);
 
-  // Detectar mudanças no hostname (navegação entre subdomínios)
-  useEffect(() => {
-    const handleLocationChange = () => {
-      const newSlug = extractSlugFromHostname();
-      if (newSlug !== communitySlug) {
-        setCommunitySlug(newSlug);
-      }
-    };
-
-    // Verificar mudanças periódicas (para desenvolvimento)
-    const interval = setInterval(handleLocationChange, 1000);
-    
-    return () => clearInterval(interval);
-  }, [communitySlug]);
-
   const setSelectedCommunity = (community: Community | null) => {
     setSelectedCommunityState(community);
     if (community) {
       setCommunitySlug(community.slug);
-    if (typeof window !== 'undefined') {
+      if (typeof window !== 'undefined') {
         localStorage.setItem('selectedCommunity', community.slug);
-        // Redirecionar para subdomínio se não estiver nele
-        const currentSlug = extractSlugFromHostname();
-        if (currentSlug !== community.slug && window.location.hostname !== 'localhost') {
-          const protocol = window.location.protocol;
-          const domain = window.location.hostname.split('.').slice(-2).join('.');
-          window.location.href = `${protocol}//${community.slug}.${domain}${window.location.pathname}${window.location.search}`;
+        // Navegar para /c/:slug se não estiver nessa rota
+        const currentPath = window.location.pathname;
+        if (!currentPath.startsWith(`/c/${community.slug}`)) {
+          setLocation(`/c/${community.slug}`);
         }
+      }
+    } else {
+      setCommunitySlug(null);
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('selectedCommunity');
       }
     }
   };

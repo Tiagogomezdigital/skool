@@ -36,7 +36,7 @@ import { useUserCommunities } from "@/hooks/use-communities";
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [location, setLocation] = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
-  const { selectedCommunity, setSelectedCommunity, isLoading: communityLoading } = useSelectedCommunity();
+  const { selectedCommunity, setSelectedCommunity, isLoading: communityLoading, communitySlug } = useSelectedCommunity();
   const { theme, setTheme } = useTheme();
   const { user, signOut } = useAuth();
   const { toast } = useToast();
@@ -45,6 +45,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { data: profile } = useProfile();
 
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(false);
+
+  // Helper para adicionar prefixo /c/:slug aos links quando uma comunidade está selecionada
+  const getLinkWithCommunity = (href: string) => {
+    if (communitySlug && !href.startsWith('/admin') && !href.startsWith('/login') && !href.startsWith('/register')) {
+      return `/c/${communitySlug}${href === '/' ? '' : href}`;
+    }
+    return href;
+  };
 
   const navigation = isAdmin === true
     ? [...baseNavigation, { name: "Admin Panel", href: "/admin", icon: Settings }]
@@ -109,7 +117,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <DropdownMenuItem 
               className="gap-2 text-muted-foreground"
               onClick={() => {
-                setLocation('/admin/communities');
+                setLocation(getLinkWithCommunity('/admin/communities'));
                 setIsMobileOpen(false);
               }}
             >
@@ -150,11 +158,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <nav className="flex flex-col gap-2">
           {navigation.map((item) => {
             const Icon = item.icon;
-            const isActive = location === item.href;
+            const linkHref = getLinkWithCommunity(item.href);
+            const isActive = location === linkHref || location === item.href;
             return (
               <Link
                 key={item.name}
-                href={item.href}
+                href={linkHref}
                 className={cn(
                   "flex items-center rounded-md text-sm font-medium transition-all duration-200 group relative",
                   collapsed ? "justify-center p-2" : "gap-3 px-3 py-2.5",
@@ -200,7 +209,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 variant="outline" 
                 size="sm" 
                 className={cn("text-xs text-muted-foreground", collapsed ? "h-8 w-full justify-center px-0" : "w-full justify-start px-2 h-8")}
-                onClick={() => setLocation('/profile')}
+                onClick={() => setLocation(getLinkWithCommunity('/profile'))}
               >
                 <Settings className={cn("h-3 w-3", !collapsed && "mr-2")} />
                 {!collapsed && "Config"}

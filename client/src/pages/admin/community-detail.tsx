@@ -79,7 +79,8 @@ export default function AdminCommunityDetail() {
         expiresInDays: inviteExpiresDays,
       });
 
-      const inviteUrl = `${window.location.protocol}//${community.slug}.${window.location.hostname.split('.').slice(-2).join('.')}/invite/${invite.token}`;
+      const baseUrl = window.location.origin;
+      const inviteUrl = `${baseUrl}/invite/${invite.token}`;
       
       // Copiar para clipboard
       await navigator.clipboard.writeText(inviteUrl);
@@ -103,7 +104,8 @@ export default function AdminCommunityDetail() {
   const copyInviteLink = async (token: string) => {
     if (!community) return;
     
-    const inviteUrl = `${window.location.protocol}//${community.slug}.${window.location.hostname.split('.').slice(-2).join('.')}/invite/${token}`;
+    const baseUrl = window.location.origin;
+    const inviteUrl = `${baseUrl}/invite/${token}`;
     await navigator.clipboard.writeText(inviteUrl);
     
     toast({

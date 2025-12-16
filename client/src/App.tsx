@@ -131,6 +131,9 @@ function Router() {
         <AuthGuard>
           <Layout>
             <Switch>
+              {/* Rota de comunidade por slug: /c/:slug - redireciona para dashboard */}
+              <Route path="/c/:slug" component={Dashboard} />
+              {/* Rotas normais (funcionam com ou sem slug no contexto) */}
               <Route path="/" component={Dashboard} />
               <Route path="/courses/:id" component={CourseView} />
               <Route path="/courses" component={Courses} />

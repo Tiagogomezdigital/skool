@@ -112,15 +112,9 @@ export default function InvitePage() {
         description: 'Você foi adicionado à comunidade com sucesso',
       });
 
-      // Redirecionar para a comunidade
+      // Redirecionar para a comunidade usando /c/:slug
       if (inviteData?.communities?.slug) {
-        const protocol = window.location.protocol;
-        const hostname = window.location.hostname;
-        const domain = hostname.includes('.') 
-          ? hostname.split('.').slice(-2).join('.')
-          : hostname;
-        
-        window.location.href = `${protocol}//${inviteData.communities.slug}.${domain}`;
+        setLocation(`/c/${inviteData.communities.slug}`);
       } else {
         setLocation('/');
       }
