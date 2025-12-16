@@ -16,6 +16,22 @@
       "destination": "/index.html"
     },
     {
+      "source": "/saved",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/profile",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/community",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/notifications",
+      "destination": "/index.html"
+    },
+    {
       "source": "/chat/:path*",
       "destination": "/index.html"
     },
