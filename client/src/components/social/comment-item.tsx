@@ -190,9 +190,12 @@ export function CommentItem({
     .slice(0, 2);
 
   return (
-    <div className={cn('space-y-3', depth > 0 && 'ml-8 border-l-2 border-border/30 pl-4')}>
+    <div className={cn(
+      'space-y-3',
+      depth > 0 && 'ml-6 pl-4 border-l-2 border-primary/20 hover:border-primary/40 transition-colors'
+    )}>
       <div className="flex gap-3">
-        <Avatar className="h-8 w-8 border border-border/50 shrink-0">
+        <Avatar className="h-8 w-8 ring-1 ring-border/50 shrink-0">
           <AvatarImage src={comment.authorAvatar} alt={comment.authorName} />
           <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>

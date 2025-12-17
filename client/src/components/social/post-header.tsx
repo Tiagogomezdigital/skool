@@ -24,9 +24,14 @@ export function PostHeader({ post, className }: PostHeaderProps) {
 
   return (
     <div className={cn('flex items-start gap-3', className)}>
-      <Avatar className="h-10 w-10 border-2 border-background shrink-0">
+      <Avatar className={cn(
+        "h-10 w-10 shrink-0 ring-2 ring-offset-2 ring-offset-background transition-all",
+        isAdmin ? "ring-primary" : "ring-border/50"
+      )}>
         <AvatarImage src={post.authorAvatar} alt={post.authorName} />
-        <AvatarFallback>{initials}</AvatarFallback>
+        <AvatarFallback className={isAdmin ? "bg-primary/10 text-primary" : ""}>
+          {initials}
+        </AvatarFallback>
       </Avatar>
       
       <div className="flex-1 min-w-0">
@@ -35,7 +40,9 @@ export function PostHeader({ post, className }: PostHeaderProps) {
           
           {/* Admin Icon - apenas para administradores */}
           {isAdmin && (
-            <Shield className="h-3.5 w-3.5 text-primary" title="Administrador" />
+            <span title="Administrador">
+              <Shield className="h-3.5 w-3.5 text-primary" />
+            </span>
           )}
 
           {/* Pin Indicator */}

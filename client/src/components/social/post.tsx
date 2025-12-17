@@ -74,7 +74,10 @@ export function PostComponent({
   return (
     <>
       <Card 
-        className={cn('border-border/50 shadow-sm hover:shadow-md transition-all cursor-pointer', className)}
+        className={cn(
+          'border-border/50 shadow-sm hover:shadow-lg hover:border-primary/30 transition-all duration-300 cursor-pointer group',
+          className
+        )}
         onClick={handlePostClick}
       >
         <CardHeader className="pb-3">

@@ -11,7 +11,7 @@ import { PostEditDialog } from './post-edit-dialog';
 import { CommentComposer } from './comment-composer';
 import { CommentList } from './comment-list';
 import { ReactionType } from '@/types/social';
-import { X, Loader2 } from 'lucide-react';
+import { X, Loader2, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { useComments } from '@/hooks/use-forum';
@@ -61,7 +61,7 @@ export function PostDetailModal({
         content: comment.content,
         authorId: comment.user_id,
         authorName: commentUser.name || commentUser.email?.split('@')[0] || 'Usuário',
-        authorAvatar: getAvatarUrl(commentUser.avatar_url, commentUser.name || commentUser.email),
+        authorAvatar: getAvatarUrl(commentUser.avatar_url, commentUser.name || commentUser.email) || undefined,
         createdAt: new Date(comment.created_at),
         reactions: [], // Será preenchido se houver dados de reações
         parentId: comment.parent_id ? String(comment.parent_id) : undefined,
@@ -220,8 +220,14 @@ export function PostDetailModal({
                   }}
                 />
               ) : (
-                <div className="text-center py-12 text-muted-foreground">
-                  <p className="text-sm">Nenhum comentário ainda. Seja o primeiro a comentar!</p>
+                <div className="text-center py-12 space-y-3">
+                  <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-muted/50">
+                    <MessageCircle className="h-6 w-6 text-muted-foreground" />
+                  </div>
+                  <div className="space-y-1">
+                    <p className="font-medium text-foreground text-sm">Nenhum comentário ainda</p>
+                    <p className="text-xs text-muted-foreground">Seja o primeiro a comentar!</p>
+                  </div>
                 </div>
               )}
             </div>

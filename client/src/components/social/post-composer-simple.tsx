@@ -146,14 +146,14 @@ export function PostComposerSimple({
             <div className="flex items-center gap-3">
               <Button
                 variant="ghost"
-                className="text-muted-foreground font-semibold hover:bg-transparent hover:text-foreground"
+                className="text-muted-foreground font-medium hover:bg-muted/50 hover:text-foreground"
                 onClick={handleCancel}
                 disabled={isPublishing}
               >
-                CANCELAR
+                Cancelar
               </Button>
               <Button
-                className="bg-primary text-primary-foreground hover:bg-primary/90 font-semibold px-6 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-primary text-primary-foreground hover:bg-primary/90 font-medium px-6 disabled:opacity-50 disabled:cursor-not-allowed shadow-sm"
                 onClick={handlePublish}
                 disabled={isDisabled}
                 title={!isValid ? 'Preencha título e conteúdo' : undefined}
@@ -164,7 +164,7 @@ export function PostComposerSimple({
                     Publicando...
                   </>
                 ) : (
-                  'PUBLICAR'
+                  'Publicar'
                 )}
               </Button>
             </div>

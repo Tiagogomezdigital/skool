@@ -49,15 +49,19 @@ export function ReactionButton({
             size="sm"
             onClick={onClick}
             className={cn(
-              'gap-2 h-8 px-2 text-muted-foreground hover:text-foreground transition-colors',
+              'gap-1.5 h-8 px-2.5 text-muted-foreground hover:text-foreground transition-all duration-200 rounded-full hover:bg-muted/80',
               isActive && config.color,
+              isActive && 'bg-muted/50',
               className
             )}
             aria-label={config.label}
           >
-            <Icon className={cn('h-4 w-4', isActive && 'fill-current')} />
+            <Icon className={cn(
+              'h-[18px] w-[18px] transition-transform duration-200',
+              isActive && 'fill-current scale-110'
+            )} />
             {count > 0 && (
-              <span className={cn('text-sm font-medium', isActive && config.color)}>
+              <span className={cn('text-sm font-semibold tabular-nums', isActive && config.color)}>
                 {count}
               </span>
             )}

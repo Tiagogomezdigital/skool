@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { MessageSquarePlus } from 'lucide-react';
 import { Post as PostType } from '@/types/social';
 import { PostComponent } from './post';
 import { PostComposerSimple } from './post-composer-simple';
@@ -133,11 +134,19 @@ export function Feed({
           })}
         </div>
       ) : (
-        <Card className="border-border/50 shadow-sm">
-          <CardContent className="p-12 text-center">
-            <p className="text-muted-foreground">
-              Nenhum post disponível. Seja o primeiro a postar!
-            </p>
+        <Card className="border-border/50 shadow-sm border-dashed">
+          <CardContent className="p-12 text-center space-y-4">
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-muted/50">
+              <MessageSquarePlus className="h-8 w-8 text-muted-foreground" />
+            </div>
+            <div className="space-y-2">
+              <p className="font-medium text-foreground">
+                Nenhum post ainda
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Seja o primeiro a compartilhar algo com a comunidade!
+              </p>
+            </div>
           </CardContent>
         </Card>
       )}

@@ -29,10 +29,6 @@ const adminNavigation = [
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  // #region agent log
-  fetch('http://127.0.0.1:7243/ingest/f7f539cc-af4e-42c4-bdaa-abc176a59b89',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'admin-layout.tsx:29',message:'AdminLayout component render',data:{hasChildren:!!children},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'C'})}).catch(()=>{});
-  // #endregion
-  
   const [location, setLocation] = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const { user, signOut } = useAuth();

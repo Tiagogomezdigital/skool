@@ -7,27 +7,16 @@ import { supabase } from '@/lib/supabase';
 import { Skeleton } from '@/components/ui/skeleton';
 
 export default function AdminDashboard() {
-  // #region agent log
-  fetch('http://127.0.0.1:7243/ingest/f7f539cc-af4e-42c4-bdaa-abc176a59b89',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'dashboard.tsx:9',message:'AdminDashboard component render',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'D'})}).catch(()=>{});
-  // #endregion
-  
   const { data: courses, isLoading: coursesLoading } = useCourses();
   
   const { data: stats, isLoading: statsLoading } = useQuery({
     queryKey: ['admin-stats'],
     queryFn: async () => {
-      // #region agent log
-      fetch('http://127.0.0.1:7243/ingest/f7f539cc-af4e-42c4-bdaa-abc176a59b89',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'dashboard.tsx:15',message:'AdminDashboard stats queryFn entry',data:{},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
-      // #endregion
       const [coursesResult, enrollmentsResult, lessonsResult] = await Promise.all([
         supabase.from('courses').select('id', { count: 'exact', head: true }),
         supabase.from('enrollments').select('id', { count: 'exact', head: true }),
         supabase.from('lessons').select('id', { count: 'exact', head: true }),
       ]);
-
-      // #region agent log
-      fetch('http://127.0.0.1:7243/ingest/f7f539cc-af4e-42c4-bdaa-abc176a59b89',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({location:'dashboard.tsx:22',message:'AdminDashboard stats queryFn result',data:{totalCourses:coursesResult.count||0,totalEnrollments:enrollmentsResult.count||0,totalLessons:lessonsResult.count||0,coursesError:!!coursesResult.error,enrollmentsError:!!enrollmentsResult.error,lessonsError:!!lessonsResult.error},timestamp:Date.now(),sessionId:'debug-session',runId:'run1',hypothesisId:'B'})}).catch(()=>{});
-      // #endregion
 
       return {
         totalCourses: coursesResult.count || 0,
