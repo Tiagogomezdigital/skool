@@ -56,7 +56,7 @@ export function useCreateCourse() {
       const { data: existingCourses } = await supabase
         .from('courses')
         .select('order')
-        .order('order', { ascending: false, nullsLast: true })
+        .order('order', { ascending: false, nullsFirst: false })
         .limit(1);
 
       const nextOrder = existingCourses && existingCourses.length > 0 && existingCourses[0].order !== null
@@ -67,7 +67,7 @@ export function useCreateCourse() {
         .from('courses')
         .insert({
           ...courseData,
-          instructor_id: user.id,
+          created_by: user.id,
           order: nextOrder,
         })
         .select()

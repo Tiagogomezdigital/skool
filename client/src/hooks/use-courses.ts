@@ -6,7 +6,7 @@ export interface Course {
   id: number;
   title: string;
   description: string | null;
-  instructor_id: string;
+  created_by: string | null;
   community_id: string | null;
   community_slug: string | null;
   cover_image_url: string | null;
@@ -153,7 +153,7 @@ export function useGetOrCreateDefaultCourse() {
           title: 'Geral',
           description: 'Curso padrão para postagens na comunidade',
           community_id: communityId,
-          instructor_id: user.id,
+          created_by: user.id,
         })
         .select('id')
         .single();

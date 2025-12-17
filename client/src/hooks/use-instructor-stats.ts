@@ -14,7 +14,7 @@ export function useInstructorStats() {
       const { data: courses, error: coursesError } = await supabase
         .from('courses')
         .select('id, title')
-        .eq('instructor_id', user.id);
+        .eq('created_by', user.id);
 
       if (coursesError) throw coursesError;
       if (!courses || courses.length === 0) return { courses: [], stats: [] };

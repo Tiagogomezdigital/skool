@@ -43,7 +43,7 @@ export type Database = {
           id: number;
           title: string;
           description: string | null;
-          instructor_id: string;
+          created_by: string | null;
           community_id: string | null;
           cover_image_url: string | null;
           image_text: string | null;
